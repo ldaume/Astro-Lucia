@@ -20,12 +20,15 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const sessionId = context.cookies.get(lucia.sessionCookieName)?.value ?? null;
   if (
     !sessionId &&
-    !(context.request.url.endsWith("/login") ||
-      context.request.url.endsWith("/signup"))
+    !(context.request.url.endsWith("/login"))
   ) {
     context.locals.user = null;
     context.locals.session = null;
-    return next("/login");
+    if (import.meta.env.SECRET_INIT_APP === "true") {
+      return next();
+    } else {
+      return next("/login");
+    }
   }
 
   const { session, user } = await lucia.validateSession(sessionId || "");

@@ -71,7 +71,7 @@ export async function POST(context: APIContext): Promise<Response> {
         "admin",
       );
 
-    const session = await lucia.createSession(userId, { role: "admin" });
+    const session = await lucia.createSession(userId, {});
     const sessionCookie = lucia.createSessionCookie(session.id);
     context.cookies.set(
       sessionCookie.name,
@@ -91,6 +91,7 @@ export async function POST(context: APIContext): Promise<Response> {
         },
       );
     }
+    console.error(e);
     return new Response(
       JSON.stringify({
         error: "An unknown error occurred",
