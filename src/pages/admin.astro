@@ -1,0 +1,12 @@
+---
+import Layout from "../layouts/Layout.astro";
+const user = Astro.locals.user;
+---
+
+<Layout>
+    <body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen">
+    <p class="text-lg text-gray-600 mb-4">Your user role is {user?.role}.</p>
+
+    </body>
+</Layout>
+
