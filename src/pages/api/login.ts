@@ -1,8 +1,8 @@
-import { lucia } from "../../lib/lucia";
+import { lucia } from "@/lib/lucia.ts";
 import { verify } from "@node-rs/argon2";
-import { db } from "../../lib/db";
+import { db } from "@/lib/db.ts";
 
-import type { DatabaseUser } from "../../lib/db";
+import type { DatabaseUser } from "@/lib/db.ts";
 import type { APIContext } from "astro";
 
 export async function POST(context: APIContext): Promise<Response> {

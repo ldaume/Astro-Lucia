@@ -1,7 +1,7 @@
-import { lucia } from "../../lib/lucia";
+import { lucia } from "@/lib/lucia.ts";
 import { generateId } from "lucia";
 import { hash } from "@node-rs/argon2";
-import { db } from "../../lib/db";
+import { db } from "@/lib/db.ts";
 import { SqliteError } from "better-sqlite3";
 
 import type { APIContext } from "astro";
@@ -62,15 +62,13 @@ export async function POST(context: APIContext): Promise<Response> {
         role,
       );
 
-    const session = await lucia.createSession(userId, {});
-    const sessionCookie = lucia.createSessionCookie(session.id);
-    context.cookies.set(
-      sessionCookie.name,
-      sessionCookie.value,
-      sessionCookie.attributes,
+    return new Response(
+      JSON.stringify({
+        message: "User successfully created.",
+        username,
+      }),
+      { status: 201 },
     );
-
-    return new Response();
   } catch (e) {
     if (e instanceof SqliteError && e.code === "SQLITE_CONSTRAINT_UNIQUE") {
       return new Response(

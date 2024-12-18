@@ -1,7 +1,7 @@
-import { lucia } from "../../lib/lucia";
+import { lucia } from "@/lib/lucia";
 import { generateId } from "lucia";
 import { hash } from "@node-rs/argon2";
-import { db } from "../../lib/db";
+import { db } from "@/lib/db";
 import { SqliteError } from "better-sqlite3";
 
 import type { APIContext } from "astro";
