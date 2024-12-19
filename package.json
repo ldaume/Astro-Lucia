@@ -12,12 +12,15 @@
     "@astrojs/check": "^0.9.4",
     "@astrojs/node": "^9.0.0",
     "@astrojs/tailwind": "^5.1.3",
+    "@astrojs/vue": "^5.0.2",
     "@lucia-auth/adapter-sqlite": "^3.0.2",
     "@node-rs/argon2": "^2.0.2",
     "astro": "^5.0.5",
     "better-sqlite3": "^11.7.0",
     "lucia": "^3.2.2",
-    "tailwindcss": "^3.4.16"
+    "tailwindcss": "^3.4.16",
+    "vue": "^3.5.13",
+    "vue3-toastify": "^0.2.8"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.12",
