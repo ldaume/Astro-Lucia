@@ -2,8 +2,8 @@
 
 A **TypeScript** project built with **Astro**, designed for seamless web
 development. This project includes tools like TailwindCSS for styling, SQLite
-for database management, Lucia for authentication, and **Vue**, ensuring a modern and
-robust development experience.
+for database management, Lucia for authentication, and **Vue**, ensuring a
+modern and robust development experience.
 
 ---
 

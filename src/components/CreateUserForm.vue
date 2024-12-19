@@ -42,26 +42,28 @@
   </form>
 </template>
 
-<script>
-import { ref } from "vue";
-import { toast } from "vue3-toastify";
+<script lang="ts">
+
+import {ref} from "vue";
+import {toast} from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
 const toastOptions = {
   "position": "bottom-right",
   "transition": "flip",
 };
+
 export default {
   name: "CreateUserForm",
 
   setup() {
-    const form = ref({
+    const form = ref<{ username: string; password: string; role: string }>({
       username: "",
       password: "",
       role: ""
     });
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (): Promise<void> => {
       try {
         const response = await fetch("/api/admin/create-user", {
           method: "POST",
@@ -79,11 +81,11 @@ export default {
           toast.error(errorResponse.error || "Something went wrong.", toastOptions);
         }
       } catch (error) {
-        toast.error(errorResponse.error || "Something went wrong.", toastOptions);
+        toast.error((error as Error).message || "Something went wrong.", toastOptions);
       }
     };
 
-    return { form, handleSubmit };
+    return {form, handleSubmit};
   }
 };
 </script>
