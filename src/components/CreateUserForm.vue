@@ -45,10 +45,25 @@
 <script lang="ts">
 
 import {ref} from "vue";
-import {toast} from "vue3-toastify";
+import {toast, type ToastOptions} from "vue3-toastify";
+import axios from "axios";
+import axiosRetry from "axios-retry";
 import "vue3-toastify/dist/index.css";
 
-const toastOptions = {
+
+axiosRetry(axios, {
+  retries: 10,
+  retryDelay: (retryCount: number) => {
+    console.log(`Retry attempt: ${retryCount}`);
+    return retryCount * 5000;
+  },
+  shouldResetTimeout: true,
+  retryCondition: (error) => {
+    return error.response?.status >= 500 || error.code === "ECONNABORTED";
+  },
+});
+
+const toastOptions: ToastOptions = {
   "position": "bottom-right",
   "transition": "flip",
 };
@@ -65,23 +80,28 @@ export default {
 
     const handleSubmit = async (): Promise<void> => {
       try {
-        const response = await fetch("/api/admin/create-user", {
-          method: "POST",
-          body: new URLSearchParams({
-            username: form.value.username,
-            password: form.value.password,
-            role: form.value.role
-          })
+        const response = await axios.post("/api/admin/create-user", {
+          username: form.value.username,
+          password: form.value.password,
+          role: form.value.role,
         });
 
-        if (response.ok) {
-          toast.success("The user has been created successfully!", toastOptions);
+        if (response.status === 201) {
+          toast("The user has been successfully created!", {
+            ...toastOptions,
+            type: "success",
+          });
         } else {
-          const errorResponse = await response.json();
-          toast.error(errorResponse.error || "Something went wrong.", toastOptions);
+          toast(
+              response.data.error || "Something went wrong.",
+              { ...toastOptions, type: "error" }
+          );
         }
-      } catch (error) {
-        toast.error((error as Error).message || "Something went wrong.", toastOptions);
+      } catch (error: any) {
+        toast(
+            error.response?.data?.error || error.message || "Maximum number of retries reached.",
+            { ...toastOptions, type: "error" }
+        );
       }
     };
 
