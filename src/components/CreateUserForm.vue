@@ -40,6 +40,10 @@
       Continue
     </button>
   </form>
+
+  <div v-if="loading" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+    <VueSpinner size="60" color="blue" />
+  </div>
 </template>
 
 <script lang="ts">
@@ -48,6 +52,7 @@ import {ref} from "vue";
 import {toast, type ToastOptions} from "vue3-toastify";
 import axios from "axios";
 import axiosRetry from "axios-retry";
+import { VueSpinner } from "vue3-spinners";
 import "vue3-toastify/dist/index.css";
 
 
@@ -70,6 +75,7 @@ const toastOptions: ToastOptions = {
 
 export default {
   name: "CreateUserForm",
+  components: { VueSpinner },
 
   setup() {
     const form = ref<{ username: string; password: string; role: string }>({
@@ -78,7 +84,10 @@ export default {
       role: ""
     });
 
+    const loading = ref(false);
+
     const handleSubmit = async (): Promise<void> => {
+      loading.value = true;
       try {
         const response = await axios.post("/api/admin/create-user", {
           username: form.value.username,
@@ -102,10 +111,12 @@ export default {
             error.response?.data?.error || error.message || "Maximum number of retries reached.",
             { ...toastOptions, type: "error" }
         );
+      } finally {
+        loading.value = false;
       }
     };
 
-    return {form, handleSubmit};
+    return {form, handleSubmit, loading};
   }
 };
 </script>
